@@ -1,10 +1,14 @@
 package com.vidmind.training.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vidmind.training.commons.CollectionConst;
 import org.bson.types.ObjectId;
+
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -23,8 +27,15 @@ public class Student {
 
     private Set<ObjectId> courseSet;
 
+    @JsonIgnore
     public ObjectId getObjectId() {
         return objectId;
+    }
+
+    @JsonProperty("objectId")
+    public String getObjectIdAsString(){
+
+        return objectId.toString();
     }
 
     public void setObjectId(ObjectId objectId) {
@@ -55,8 +66,15 @@ public class Student {
         this.age = age;
     }
 
+    @JsonIgnore
     public Set<ObjectId> getCourseSet() {
         return courseSet;
+    }
+
+    @JsonProperty("courseSet")
+    public String getCourseSetAsString() {
+
+        return courseSet.toString();
     }
 
     public void setCourseSet(Set<ObjectId> courseSet) {

@@ -11,4 +11,7 @@ public interface StudentService {
     public void createNewStudent(Student student);
     public void updateExistingStudent(Student student);
     public void deleteExistingStudent(ObjectId assetId);
+    public Student getStudentDetails(ObjectId objectId);
+    public Student addCourseToStudent(ObjectId studentId, ObjectId courseId);
+    public Student removeCourseFromStudent(ObjectId studentId, ObjectId courseId);
 }

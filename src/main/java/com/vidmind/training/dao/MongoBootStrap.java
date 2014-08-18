@@ -1,5 +1,6 @@
 package com.vidmind.training.dao;
 
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
 import org.mongodb.morphia.Datastore;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import java.net.UnknownHostException;
 
@@ -24,6 +26,7 @@ public class MongoBootStrap {
 
     @Value("${mongo.host.url}")
     String mongoHost;
+
     @Value("${mongo.db.name}")
     String mongoDB;
 
@@ -47,6 +50,14 @@ public class MongoBootStrap {
         morphia.mapPackage(ENTITIES_PACKAGE);
         return datastore;
     }
+
+
+    @Bean(name = "db")
+    public DB db(){
+        return mongoClient().getDB(mongoDB);
+    }
+
+
 
 
 

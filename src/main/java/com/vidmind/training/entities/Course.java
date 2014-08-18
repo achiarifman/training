@@ -1,5 +1,7 @@
 package com.vidmind.training.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vidmind.training.commons.CollectionConst;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -14,19 +16,24 @@ import java.util.Set;
 public class Course {
 
     @Id
-    private ObjectId id;
+    private ObjectId objectId;
     private String courseName;
     private int points;
 
     private Set<ObjectId> dependedCourses;
 
-
-    public ObjectId getId() {
-        return id;
+    @JsonIgnore
+    public ObjectId getobjectId() {
+        return objectId;
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
+    @JsonProperty("objectId")
+    public String getobjectIdAsString() {
+        return objectId.toString();
+    }
+
+    public void setobjectId(ObjectId id) {
+        this.objectId = id;
     }
 
     public String getCourseName() {
@@ -45,8 +52,14 @@ public class Course {
         this.points = points;
     }
 
+    @JsonIgnore
     public Set<ObjectId> getDependedCourses() {
         return dependedCourses;
+    }
+
+    @JsonProperty("dependedCourses")
+    public String getDependedCoursesAsString() {
+        return dependedCourses.toString();
     }
 
     public void setDependedCourses(Set<ObjectId> dependedCourses) {

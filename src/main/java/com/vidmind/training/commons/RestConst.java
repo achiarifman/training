@@ -8,6 +8,8 @@ public class RestConst {
 
     /* Student rest const */
     public final static String STUDENT = "student";
+    public final static String ADD = "add";
+    public final static String REMOVE = "remove";
 
 
 
