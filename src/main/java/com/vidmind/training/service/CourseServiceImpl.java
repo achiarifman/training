@@ -8,6 +8,9 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by barcelona on 8/17/14.
  */
@@ -47,7 +50,13 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public void deleteCourse(ObjectId courseId) {
 
-        courseQueries.deleteCourse(courseId);
         studentQueries.removeCourseFromAllStudents(courseId);
+        courseQueries.deleteCourse(courseId);
+    }
+
+    @Override
+    public List<Course> getCourses(int limit, int offset){
+
+        return courseQueries.getCoursesByOffsetAndLimit(limit,offset);
     }
 }

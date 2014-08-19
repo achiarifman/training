@@ -1,12 +1,19 @@
 package com.vidmind.training.service;
 
+import com.vidmind.training.dao.CourseQueries;
 import com.vidmind.training.dao.StudentQueries;
+import com.vidmind.training.entities.Course;
 import com.vidmind.training.entities.Student;
 import com.vidmind.training.exception.CouldNotUpdateException;
+import com.vidmind.training.exception.DependedCourseException;
+import com.vidmind.training.exception.ExceptionMessage;
+import com.vidmind.training.exception.StudentNotFoundException;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 /**
  * Created by Achia.Rifman on 10/08/2014.
@@ -17,6 +24,9 @@ public class StudentServiceImpl implements StudentService{
 
     @Autowired
     StudentQueries studentQueries;
+
+    @Autowired
+    CourseQueries courseQueries;
 
     @Override
     public void createNewStudent(Student student) {
@@ -40,12 +50,23 @@ public class StudentServiceImpl implements StudentService{
     public Student getStudentDetails(ObjectId objectId) {
 
         //add a check if student not found
-        return studentQueries.getStudent(objectId);
+        Student student = studentQueries.getStudent(objectId);
+        if(student == null){
+            throw new StudentNotFoundException("Could not find the student id " + objectId);
+        }
+        return student;
     }
 
     @Override
     public Student addCourseToStudent(ObjectId studentId, ObjectId courseId) {
 
+        Course course = courseQueries.getExistingCourse(courseId);
+        Set<ObjectId> depndedCourses = course.getDependedCourses();
+        if( depndedCourses!= null && depndedCourses.size() > 0){
+              if(!isStudentHasDependedCourses(studentId, depndedCourses)){
+                  throw new DependedCourseException(depndedCourses.toString());
+              }
+        }
         if(studentQueries.addCourseToStudent(studentId,courseId)){
             return getStudentDetails(studentId);
         }
@@ -56,11 +77,18 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public Student removeCourseFromStudent(ObjectId studentId, ObjectId courseId) {
 
-        if(studentQueries.removeCourseFromStudent(studentId,courseId)){
+        if(studentQueries.removeCourseFromStudent(studentId, courseId)){
             return getStudentDetails(studentId);
         }
         throw new CouldNotUpdateException("Could not remove the course " + courseId + " from student " + studentId);
     }
+
+    public boolean isStudentHasDependedCourses(ObjectId studentId,Set<ObjectId> depndedCourses){
+
+        Student student = getStudentDetails(studentId);
+        return student.getCourseSet().contains(depndedCourses);
+    }
+
 
 
 }

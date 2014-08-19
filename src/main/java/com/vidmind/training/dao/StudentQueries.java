@@ -62,16 +62,20 @@ public class StudentQueries extends BaseQueries{
         return datastore.createQuery(Student.class).field(Mapper.ID_KEY).equal(objectId);
     }
 
-    public Query<Student> queryFindStudentByContainedCourse(ObjectId objectId){
+/*    public Query<Student> queryFindStudentByContainedCourse(ObjectId objectId){
 
         List<Student> list = datastore.createQuery(Student.class).field(COURSE_SET).hasThisElement(objectId).asList();
         return null;
-    }
+    }*/
 
-    public boolean removeCourseFromAllStudents(ObjectId courseId){
+    public void removeCourseFromAllStudents(ObjectId courseId){
 
         UpdateOperations<Student> ops = datastore.createUpdateOperations(Student.class).removeAll(COURSE_SET, courseId);
-        UpdateResults updateResults = datastore.update(queryFindStudentByContainedCourse(courseId), ops);
-        return updateResults.getUpdatedExisting();
+
+        List<Student> studentsToModify = datastore.createQuery(Student.class).field(COURSE_SET).hasThisOne(courseId).asList();
+        for(Student student : studentsToModify){
+            datastore.update(queryFindStudentById(student.getObjectId()),ops);
+        }
+
     }
 }

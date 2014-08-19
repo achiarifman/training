@@ -8,13 +8,9 @@ import org.testng.annotations.Listeners;
 /**
  * Created by Achia.Rifman on 07/08/2014.
  */
-@Listeners({TestListener.class})
+//@Listeners({TestListener.class})
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
 
-
-    public void suite(){
-
-    }
 }

@@ -18,6 +18,7 @@ public class RestConst {
     public final static String DETAILS = "details";
     public final static String NEW = "new";
     public final static String DELETE = "delete";
+    public final static String MANAGMENT = "mgmt";
 
 
     /* Course rest const */

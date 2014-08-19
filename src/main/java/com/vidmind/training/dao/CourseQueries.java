@@ -11,6 +11,9 @@ import org.mongodb.morphia.query.UpdateResults;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by barcelona on 8/17/14.
@@ -46,6 +49,11 @@ public class CourseQueries extends BaseQueries{
     public void deleteCourse(ObjectId courseId){
 
         datastore.findAndDelete(queryFindCourseById(courseId));
+    }
+
+    public List<Course> getCoursesByOffsetAndLimit(int limit, int offset){
+
+        return datastore.find(Course.class).limit(limit).offset(offset).asList();
     }
 
     public Query<Course> queryFindCourseById(ObjectId objectId){

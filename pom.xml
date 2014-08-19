@@ -156,6 +156,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>wordnet-random-name</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

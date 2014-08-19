@@ -2,8 +2,7 @@ package com.vidmind.training.provider;
 
 import com.vidmind.training.commons.ProviderConst;
 import com.vidmind.training.entities.Student;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.kohsuke.randname.RandomNameGenerator;
 import org.testng.annotations.DataProvider;
 
 import java.util.Random;
@@ -15,7 +14,12 @@ import java.util.Random;
 public class StudentDataProvider {
 
 
-    static int numOfStudents = 1;
+    final static int NUM_OF_STUDENTS = 1;
+    private static RandomNameGenerator rnd = new RandomNameGenerator(0);
+
+    final static int MAX_AGE = 80;
+    final static int MIN_AGE = 20;
+
 
     @DataProvider(name= ProviderConst.STUDENT_PROVIDER)
     public static Object[][] freeMovieDataProvider() {
@@ -27,23 +31,24 @@ public class StudentDataProvider {
     public static Object[][] getStudents(){
 
 
-        Object[][] studentsArray = new Object[numOfStudents][];
-        for(int i = 0 ; i < numOfStudents ; i++){
-            Object[][] dataArray = {{i,getRandomStudent()}};
+        Object[][] studentsArray = new Object[NUM_OF_STUDENTS][];
+        for(int i = 0 ; i < NUM_OF_STUDENTS; i++){
+            Object[][] dataArray = {{i,getRandomStudent(i)}};
             studentsArray[i] = dataArray[0];
         }
 
         return studentsArray;
     }
 
-    public static Student getRandomStudent(){
+    public static Student getRandomStudent(int i){
 
         Student student = new Student();
 
-        student.setFirstName("Auto");
-        student.setLastName("Auto" + System.currentTimeMillis());
+        String[] randNames = rnd.next().split("_");
+        student.setFirstName(randNames[0]);
+        student.setLastName(randNames[1] + System.currentTimeMillis());
         Random randomGenerator = new Random();
-        student.setAge(randomGenerator.nextInt(80 - 1));
+        student.setAge(randomGenerator.nextInt(MAX_AGE - MIN_AGE) + MIN_AGE);
         return student;
     }
 

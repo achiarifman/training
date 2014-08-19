@@ -1,12 +1,16 @@
 package com.vidmind.training.entities;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.vidmind.training.commons.CollectionConst;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,7 +31,7 @@ public class Course {
         return objectId;
     }
 
-    @JsonProperty("objectId")
+    @JsonGetter("objectId")
     public String getobjectIdAsString() {
         return objectId.toString();
     }
@@ -57,12 +61,27 @@ public class Course {
         return dependedCourses;
     }
 
-    @JsonProperty("dependedCourses")
-    public String getDependedCoursesAsString() {
-        return dependedCourses.toString();
+    @JsonGetter("dependedCourses")
+    public Set<String> getDependedCoursesAsString() {
+
+        Set<String> courses = new HashSet<String>();
+        for(ObjectId courseId : dependedCourses){
+            courses.add(courseId.toString());
+        }
+        return courses;
     }
 
+    @JsonIgnore
     public void setDependedCourses(Set<ObjectId> dependedCourses) {
         this.dependedCourses = dependedCourses;
+    }
+
+    @JsonSetter("dependedCourses")
+    public void setDependedCourses(List<String> dependedCoursesList) {
+
+        this.dependedCourses = new HashSet<ObjectId>();
+        for(String id : dependedCoursesList){
+            dependedCourses.add(new ObjectId(id));
+        }
     }
 }
