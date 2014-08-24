@@ -10,6 +10,7 @@ public class RestConst {
     public final static String STUDENT = "student";
     public final static String ADD = "add";
     public final static String REMOVE = "remove";
+    public final static String LIST = "list";
 
 
 
@@ -23,5 +24,5 @@ public class RestConst {
 
     /* Course rest const */
     public final static String COURSE = "course";
-    public final static String ADD_DEPENDE = "depend/add";
+    public final static String ADD_DEPENDED = "depend/add";
 }

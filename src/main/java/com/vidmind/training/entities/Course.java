@@ -1,11 +1,9 @@
 package com.vidmind.training.entities;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
 import com.vidmind.training.commons.CollectionConst;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
@@ -17,9 +15,11 @@ import java.util.Set;
  * Created by Achia.Rifman on 06/08/2014.
  */
 @Entity(CollectionConst.COURSES)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Course {
 
     @Id
+    @JsonProperty("objectId")
     private ObjectId objectId;
     private String courseName;
     private int points;
@@ -83,5 +83,22 @@ public class Course {
         for(String id : dependedCoursesList){
             dependedCourses.add(new ObjectId(id));
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Course course = (Course) o;
+
+        if (objectId != null ? !objectId.equals(course.objectId) : course.objectId != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return objectId != null ? objectId.hashCode() : 0;
     }
 }

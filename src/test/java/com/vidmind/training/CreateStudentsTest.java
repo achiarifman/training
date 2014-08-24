@@ -14,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static org.testng.Assert.fail;
 
@@ -65,7 +62,9 @@ public class CreateStudentsTest extends BaseTest{
             }
             studentCourses.add(course.getobjectId());
         }
-        student.setCourseSet(studentCourses);
+        //student.setCourseSet(studentCourses);
+
+        student.setCourseSet(new HashSet<Course>(courses));
         studentService.createNewStudent(student);
         if(studentService.getStudentDetails(student.getObjectId()) == null)
             fail("Could not create the student with courses " + student.toString());

@@ -6,4 +6,5 @@ package com.vidmind.training.dao.commons;
 public class MongoConst {
 
     public final static String ID = "_id";
+    public final static String STUDENT_LIST = "studentsList";
 }

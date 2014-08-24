@@ -1,22 +1,18 @@
 package com.vidmind.training.rest;
 
-import com.mongodb.MongoClient;
 import com.sun.jersey.api.core.InjectParam;
 import com.vidmind.training.commons.PathParamConst;
+import com.vidmind.training.commons.QueryConst;
 import com.vidmind.training.commons.RestConst;
 import com.vidmind.training.commons.RestParamsConst;
 import com.vidmind.training.entities.Student;
-import com.vidmind.training.exception.CouldNotUpdateException;
 import com.vidmind.training.service.StudentService;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +33,8 @@ public class StudentRestService extends RestApplication{
     @InjectParam
     StudentService studentService;
 
+
+
     @POST
     @Path(RestConst.NEW)
     public Student createStudent(Student student){
@@ -54,12 +52,12 @@ public class StudentRestService extends RestApplication{
         studentService.deleteExistingStudent(assetId);
     }
 
-/*    @PUT
-    @Path(RestConst.UPDATE + PathParamConst.SEPERATOR + PathParamConst.PARAM_ID)
-    public void updateStudent(Student student){
+    @GET
+    @Path(RestConst.LIST)
+    public List<Student> getAllStudents(@DefaultValue("20") @QueryParam(QueryConst.LIMIT) int limit, @DefaultValue("0") @QueryParam(QueryConst.OFFSET) int offset){
 
-    }*/
-
+        return studentService.getAllStudents(limit,offset);
+    }
 
     @PUT
     @Path(RestConst.ADD + PathParamConst.SEPERATOR + RestConst.COURSE + PathParamConst.SEPERATOR + PathParamConst.PARAM_ID)

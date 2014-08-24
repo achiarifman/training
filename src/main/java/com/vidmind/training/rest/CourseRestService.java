@@ -58,8 +58,8 @@ public class CourseRestService {
         return courseService.getExistingCourse(courseId);
     }
 
-    @POST
-    @Path(RestConst.ADD_DEPENDE + PathParamConst.SEPERATOR + PathParamConst.PARAM_ID)
+    @PUT
+    @Path(RestConst.ADD_DEPENDED + PathParamConst.SEPERATOR + PathParamConst.PARAM_ID)
     public Course addCourseDependency(@PathParam(PathParamConst.ID) ObjectId courseId ,Map<String,String> addCourses){
 
         ObjectId dependedCourse = new ObjectId(addCourses.get(RestParamsConst.DEPENDED_ID));

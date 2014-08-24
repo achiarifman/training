@@ -9,4 +9,6 @@ public class PathParamConst {
     public final static String SEPERATOR = "/";
     public final static String PARAM_ID = "{id}";
     public final static String ID = "id";
+
+
 }

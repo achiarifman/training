@@ -28,19 +28,19 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public void createNewCourse(Course course) {
 
-        courseQueries.saveNewCourse(course);
+        courseQueries.save(course);
     }
 
     @Override
     public Course getExistingCourse(ObjectId courseId) {
 
-        return courseQueries.getExistingCourse(courseId);
+        return courseQueries.get(courseId);
     }
 
     @Override
     public Course addDependedCourse(ObjectId courseId, ObjectId dependedCourseId) {
 
-        Course dependedCourse = courseQueries.getExistingCourse(dependedCourseId);
+        //Course dependedCourse = courseQueries.get(dependedCourseId);
         if(courseQueries.addDepndedCourse(courseId,dependedCourseId)){
             return getExistingCourse(courseId);
         }
@@ -50,8 +50,9 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public void deleteCourse(ObjectId courseId) {
 
-        studentQueries.removeCourseFromAllStudents(courseId);
-        courseQueries.deleteCourse(courseId);
+        Course course = courseQueries.get(courseId);
+        studentQueries.removeCourseFromAllStudents(course);
+        courseQueries.deleteById(courseId);
     }
 
     @Override

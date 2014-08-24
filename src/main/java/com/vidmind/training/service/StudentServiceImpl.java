@@ -13,6 +13,8 @@ import org.mongodb.morphia.Datastore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,7 +33,15 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public void createNewStudent(Student student) {
 
-        studentQueries.saveNewStudent(student);
+        if(student.getCourseSet() != null && student.getCourseSet().size() > 0){
+            Set<Course> courses = student.getCourseSet();
+            Set<Course> persistCourses = new HashSet<>();
+            for(Course course : courses){
+                persistCourses.add(courseQueries.get(course.getobjectId()));
+            }
+            student.setCourseSet(persistCourses);
+        }
+        studentQueries.save(student);
     }
 
     @Override
@@ -43,14 +53,14 @@ public class StudentServiceImpl implements StudentService{
     public void deleteExistingStudent(ObjectId assetId) {
 
         //add a check if could not delete student
-        studentQueries.removeStudent(assetId);
+        studentQueries.deleteById(assetId);
     }
 
     @Override
     public Student getStudentDetails(ObjectId objectId) {
 
         //add a check if student not found
-        Student student = studentQueries.getStudent(objectId);
+        Student student = studentQueries.get(objectId);
         if(student == null){
             throw new StudentNotFoundException("Could not find the student id " + objectId);
         }
@@ -60,14 +70,14 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public Student addCourseToStudent(ObjectId studentId, ObjectId courseId) {
 
-        Course course = courseQueries.getExistingCourse(courseId);
+        Course course = courseQueries.get(courseId);
         Set<ObjectId> depndedCourses = course.getDependedCourses();
         if( depndedCourses!= null && depndedCourses.size() > 0){
               if(!isStudentHasDependedCourses(studentId, depndedCourses)){
                   throw new DependedCourseException(depndedCourses.toString());
               }
         }
-        if(studentQueries.addCourseToStudent(studentId,courseId)){
+        if(studentQueries.addCourseToStudent(studentId,courseQueries.get(courseId))){
             return getStudentDetails(studentId);
         }
         throw new CouldNotUpdateException("Could not add the course " + courseId + " of student " + studentId);
@@ -81,6 +91,11 @@ public class StudentServiceImpl implements StudentService{
             return getStudentDetails(studentId);
         }
         throw new CouldNotUpdateException("Could not remove the course " + courseId + " from student " + studentId);
+    }
+
+    @Override
+    public List<Student> getAllStudents(int limit, int offset){
+        return studentQueries.getAllStudents(limit,offset);
     }
 
     public boolean isStudentHasDependedCourses(ObjectId studentId,Set<ObjectId> depndedCourses){

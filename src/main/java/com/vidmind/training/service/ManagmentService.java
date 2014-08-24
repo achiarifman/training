@@ -1,7 +1,6 @@
 package com.vidmind.training.service;
 
-import com.vidmind.training.entities.Course;
-import com.vidmind.training.entities.Student;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 import java.util.Map;
@@ -11,5 +10,5 @@ import java.util.Map;
  */
 public interface ManagmentService {
 
-    public Map<Course,List<Student>> getSpecial();
+    public Map<ObjectId, List<String>> getSpecial();
 }
